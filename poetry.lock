@@ -1,0 +1,58 @@
+[[package]]
+name = "adafruit-charlcd"
+version = "1.1.1"
+description = "Library to drive character LCD display and plate."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Adafruit-GPIO = ">=0.4.0"
+
+[[package]]
+name = "adafruit-gpio"
+version = "1.0.3"
+description = "Library to provide a cross-platform GPIO interface on the Raspberry Pi and Beaglebone Black using the RPi.GPIO and Adafruit_BBIO libraries."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+adafruit-pureio = "*"
+spidev = "*"
+
+[[package]]
+name = "adafruit-pureio"
+version = "1.1.9"
+description = "Pure python (i.e. no native extensions) access to Linux IO    including I2C and SPI. Drop in replacement for smbus and spidev modules."
+category = "main"
+optional = false
+python-versions = ">=3.5.0"
+
+[[package]]
+name = "spidev"
+version = "3.5"
+description = "Python bindings for Linux SPI access through spidev"
+category = "main"
+optional = false
+python-versions = "*"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.9.4"
+content-hash = "eace08c934dde2dedc1c58286a3c31ba16c83cc0e58f4e8ca9c42079dd45973e"
+
+[metadata.files]
+adafruit-charlcd = [
+    {file = "Adafruit_CharLCD-1.1.1-py2-none-any.whl", hash = "sha256:e63ebeffd1289bb541987bed69621977a048678452fee8013aa70600ab66e92e"},
+    {file = "Adafruit_CharLCD-1.1.1.tar.gz", hash = "sha256:c02ce1ac07d2adf746284bd2188407dd9d65af73329b1adde201848628c5f300"},
+]
+adafruit-gpio = [
+    {file = "Adafruit_GPIO-1.0.3.tar.gz", hash = "sha256:d6465b92c866c51ca8f3bc1e8f2ec36f5ccdb46d0fd54101c1109756d4a2dcd0"},
+]
+adafruit-pureio = [
+    {file = "Adafruit_PureIO-1.1.9.tar.gz", hash = "sha256:2caf22fb07c7f771d83267f331a76cde314723f884a9570ea6f768730c87a879"},
+]
+spidev = [
+    {file = "spidev-3.5.tar.gz", hash = "sha256:8a7f5c289f161ea2ac4697fa8a10918232c990678dd0053084b3c43b1363910d"},
+]
