@@ -3,3 +3,6 @@
 source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+gem 'pi_piper'
+gem 'i2c-devices', '~> 0.0.6'

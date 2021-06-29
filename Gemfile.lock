@@ -1,11 +1,19 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    eventmachine (1.0.9)
+    ffi (1.15.3)
+    i2c-devices (0.0.6)
+    pi_piper (2.0.0)
+      eventmachine (= 1.0.9)
+      ffi
 
 PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
+  i2c-devices (~> 0.0.6)
+  pi_piper
 
 BUNDLED WITH
    2.2.15
