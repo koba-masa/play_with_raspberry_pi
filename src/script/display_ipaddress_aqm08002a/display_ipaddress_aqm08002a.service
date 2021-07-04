@@ -1,0 +1,17 @@
+[Unit]
+Description=Display IPAddress to AQM0802A
+After=syslog.target
+
+[Service]
+Type=simple
+Environment="PATH=/home/pi/.rbenv/bin:${PATH}"
+Environment="RUBY_DIR=/home/pi/.rbenv/versions/3.0.1/bin"
+Environment="WORK_DIR=/home/pi/Documents/play_with_raspberry_pi/src"
+Environment="SCRIPT_DIR=${WORK_DIR}/script/display_ipaddress_aqm08002a"
+ExecStart=sudo -i ${RUBY_DIR}/ruby -I ${WORK_DIR} ${SCRIPT_DIR}/main.rb
+ExecStop=/bin/kill ${MAINPID}
+User=pi
+TimeoutStopSec=5
+StandardOutput=null
+
+[Install]
