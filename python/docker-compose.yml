@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./src:/usr/src/app
+    tty: true
+    environment:
+      PYTHONPATH: /usr/src/app
+    command: bash -c "poetry install; /bin/bash"
