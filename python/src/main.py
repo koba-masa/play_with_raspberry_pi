@@ -15,11 +15,12 @@ class Koyanagi:
         RPi.GPIO.setup(self.start_btn, RPi.GPIO.IN, pull_up_down=RPi.GPIO.PUD_UP)
 
     def execute(self):
-        while true:
-            RPi.GPIO.output(self.processed_lamp, 1)
-            time.sleep(1)
-            RPi.GPIO.output(self.processed_lamp, 0)
-            time.sleep(1)
+        RPi.GPIO.output(self.processed_lamp, 0)
+        #while true:
+        #    RPi.GPIO.output(self.processed_lamp, 1)
+        #    time.sleep(1)
+        #    RPi.GPIO.output(self.processed_lamp, 0)
+        #    time.sleep(1)
 
     def __del__(self):
         RPi.GPIO.cleanup(self.processed_lamp)
