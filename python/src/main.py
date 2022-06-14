@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 
 import time
 
+class TimeAttack:
   def __init__(self):
     # 測定中のランプ
     self.processed_lamp = 26
@@ -32,10 +33,10 @@ import time
       GPIO.remove_event_detect(self.finish_btn)
       GPIO.cleanup(self.finish_btn)
 
-  def start(self):
+  def start(self, gpio):
     GPIO.output(self.processed_lamp, GPIO.HIGH)
 
-  def finish(self):
+  def finish(self, gpio):
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
-Koyanagi().execute()
+TimeAttack().execute()
