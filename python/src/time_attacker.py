@@ -13,19 +13,15 @@ class TimeAttacker:
     self.start_btn = 19
     # 終了ボタン
     self.finish_btn = 21
-    # リセットボタン
-    self.reset_btn = 20
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(self.processed_lamp, GPIO.OUT)
     GPIO.setup(self.start_btn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(self.finish_btn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(self.reset_btn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
   def execute(self):
     GPIO.add_event_detect(self.start_btn, GPIO.FALLING, callback=self.start, bouncetime=300)
     GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=300)
-    GPIO.add_event_detect(self.reset_btn, GPIO.FALLING, callback=self.reset, bouncetime=300)
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
     self.lcd = AQM0802A()
@@ -41,8 +37,6 @@ class TimeAttacker:
       GPIO.cleanup(self.start_btn)
       GPIO.remove_event_detect(self.finish_btn)
       GPIO.cleanup(self.finish_btn)
-      GPIO.remove_event_detect(self.reset_btn)
-      GPIO.cleanup(self.reset_btn)
       self.lcd.turn_off_display()
       self.lcd.reset()
 
@@ -52,14 +46,6 @@ class TimeAttacker:
       self.lcd.display_upper('start')
       self.start = time.perf_counter()
       GPIO.output(self.processed_lamp, GPIO.HIGH)
-
-  def reset(self, gpio):
-    if GPIO.input(self.processed_lamp) == 1:
-      print("reset")
-      GPIO.output(self.processed_lamp, GPIO.LOW)
-      self.start = 0
-      self.end = 0
-      self.lcd.reset()
 
   def finish(self, gpio):
     if GPIO.input(self.processed_lamp) == 1:
