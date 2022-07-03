@@ -1,3 +1,4 @@
+import RPi.GPIO as GPIO
 import smbus
 import time
 import subprocess
@@ -13,11 +14,16 @@ class AQM0802A:
 
   HOME=0x02
 
+  LIGHT = 4
+
   def __init__(self):
     self.i2c = smbus.SMBus(1)
     self.setup()
     self.turn_on_display()
     self.reset()
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(self.LIGHT, GPIO.OUT)
+    self.light_off()
 
   def setup(self):
     self.__command(0x38)
@@ -36,10 +42,10 @@ class AQM0802A:
     self.__command(self.DISPLAY_OFF)
 
   def light_on(self):
-    pass
+    GPIO.output(self.LIGHT, GPIO.HIGH)
 
   def light_off(self):
-    pass
+    GPIO.output(self.LIGHT, GPIO.LOW)
 
   def reset(self):
     self.__command(self.CLEAR)
