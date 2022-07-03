@@ -5,8 +5,8 @@ import random
 
 class Main:
   def __init__(self):
-    self.start_btn = 23
-    self.yellow_lamp = 18
+    self.start_btn = 18
+    self.yellow_lamp = 23
     self.blue_lamp = 24
     self.green_lamp = 25
     self.red_lamp = 12
