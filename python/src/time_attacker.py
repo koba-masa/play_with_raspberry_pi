@@ -4,13 +4,14 @@ import time
 import math
 
 from device.aqm0802a import AQM0802A
+from device.ssd1306 import SSD1306
 
-class TimeAttack:
+class TimeAttacker:
   def __init__(self):
     # 測定中のランプ
-    self.processed_lamp = 26
+    self.processed_lamp = 19
     # 開始ボタン
-    self.start_btn = 19
+    self.start_btn = 26
     # 終了ボタン
     self.finish_btn = 21
 
@@ -24,11 +25,11 @@ class TimeAttack:
     GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=300)
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
-    self.lcd = AQM0802A()
+    self.display = SSD1306(0x3c, 128, 32)
 
     try:
       while True:
-        time.sleep(1)
+        time.sleep(100000000)
     except Exception as e:
       print(e)
     finally:
@@ -37,23 +38,37 @@ class TimeAttack:
       GPIO.cleanup(self.start_btn)
       GPIO.remove_event_detect(self.finish_btn)
       GPIO.cleanup(self.finish_btn)
-      self.lcd.reset()
-      self.lcd.turn_off_display()
+      self.display.reset()
 
   def start(self, gpio):
-    print("start")
-    self.lcd.display_upper('start')
-    self.start = time.perf_counter()
-    GPIO.output(self.processed_lamp, GPIO.HIGH)
+    if GPIO.input(self.processed_lamp) == 0:
+      print("start")
+      self.display.reset()
+      self.start = time.perf_counter()
+      self.turn_on_off_led(GPIO.HIGH)
 
   def finish(self, gpio):
-    print("finish")
-    self.lcd.reset()
-    self.end = time.perf_counter()
-    self.attack_time = math.ceil(self.end - self.start)
-    self.lcd.display_upper(str(self.attack_time))
-    GPIO.output(self.processed_lamp, GPIO.LOW)
+    if GPIO.input(self.processed_lamp) == 1:
+      print("finish")
+      self.display.reset()
+      self.end = time.perf_counter()
+      attack_time = self.calculate(self.start, self.end)
+      print(attack_time)
+      self.write(attack_time)
+      self.turn_on_off_led(GPIO.LOW)
+      self.reset()
+
+  def write(self, attack_time):
+    self.display.write(format(attack_time, '.1f') + '  Sec')
+
+  def reset(self):
     self.start = 0
     self.end = 0
 
-TimeAttack().execute()
+  def turn_on_off_led(self, up_down):
+    GPIO.output(self.processed_lamp, up_down)
+
+  def calculate(self, start_time, end_time):
+    return end_time - start_time
+
+TimeAttacker().execute()
