@@ -59,6 +59,7 @@ class TimeAttacker:
       self.reset()
 
   def write(self, attack_time):
+    self.display.reset()
     self.display.write(format(attack_time, '.1f') + '  Sec')
 
   def reset(self):
