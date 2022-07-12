@@ -25,8 +25,7 @@ class TimeAttacker:
     GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=300)
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
-    self.display = SSD1306(0x3c, 128, 64)
-    #self.display.light_on()
+    self.display = SSD1306(0x3c, 128, 32)
 
     try:
       while True:
@@ -34,20 +33,17 @@ class TimeAttacker:
     except Exception as e:
       print(e)
     finally:
-      #self.display.light_off()
       GPIO.cleanup(self.processed_lamp)
       GPIO.remove_event_detect(self.start_btn)
       GPIO.cleanup(self.start_btn)
       GPIO.remove_event_detect(self.finish_btn)
       GPIO.cleanup(self.finish_btn)
-      #self.display.turn_off_display()
       self.display.reset()
 
   def start(self, gpio):
     if GPIO.input(self.processed_lamp) == 0:
       print("start")
       self.display.reset()
-      #self.display.display_upper('start')
       self.start = time.perf_counter()
       self.turn_on_off_led(GPIO.HIGH)
 
