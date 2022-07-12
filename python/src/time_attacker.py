@@ -4,6 +4,7 @@ import time
 import math
 
 from device.aqm0802a import AQM0802A
+from device.ssd1306 import SSD1306
 
 class TimeAttacker:
   def __init__(self):
@@ -24,8 +25,8 @@ class TimeAttacker:
     GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=300)
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
-    self.lcd = AQM0802A()
-    self.lcd.light_on()
+    self.display = SSD1306(0x3c, 128, 64)
+    #self.display.light_on()
 
     try:
       while True:
@@ -33,32 +34,36 @@ class TimeAttacker:
     except Exception as e:
       print(e)
     finally:
-      self.lcd.light_off()
+      #self.display.light_off()
       GPIO.cleanup(self.processed_lamp)
       GPIO.remove_event_detect(self.start_btn)
       GPIO.cleanup(self.start_btn)
       GPIO.remove_event_detect(self.finish_btn)
       GPIO.cleanup(self.finish_btn)
-      self.lcd.turn_off_display()
-      self.lcd.reset()
+      #self.display.turn_off_display()
+      self.display.reset()
 
   def start(self, gpio):
     if GPIO.input(self.processed_lamp) == 0:
       print("start")
-      self.lcd.reset()
-      self.lcd.display_upper('start')
+      self.display.reset()
+      #self.display.display_upper('start')
       self.start = time.perf_counter()
       self.turn_on_off_led(GPIO.HIGH)
 
   def finish(self, gpio):
     if GPIO.input(self.processed_lamp) == 1:
       print("finish")
-      self.lcd.reset()
+      self.display.reset()
       self.end = time.perf_counter()
-      self.attack_time = self.calculate(self.start, self.end)
-      self.display(self.attack_time)
+      attack_time = self.calculate(self.start, self.end)
+      print(attack_time)
+      self.write(attack_time)
       self.turn_on_off_led(GPIO.LOW)
       self.reset()
+
+  def write(self, attack_time):
+    self.display.write(format(attack_time, '.1f') + '  Sec')
 
   def reset(self):
     self.start = 0
@@ -68,11 +73,6 @@ class TimeAttacker:
     GPIO.output(self.processed_lamp, up_down)
 
   def calculate(self, start_time, end_time):
-    # TODO 1/10秒まで計測する
-    return math.ceil(end_time - start_time)
-
-  def display(self, contents):
-    self.lcd.display_upper(str(contents))
-    self.lcd.display_lower('     sec')
+    return end_time - start_time
 
 TimeAttacker().execute()
