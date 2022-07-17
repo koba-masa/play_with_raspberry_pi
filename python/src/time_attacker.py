@@ -9,11 +9,11 @@ from device.ssd1306 import SSD1306
 class TimeAttacker:
   def __init__(self):
     # 測定中のランプ
-    self.processed_lamp = 19
+    self.processed_lamp = 13
     # 開始ボタン
-    self.start_btn = 26
+    self.start_btn = 19
     # 終了ボタン
-    self.finish_btn = 21
+    self.finish_btn = 26
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(self.processed_lamp, GPIO.OUT)
