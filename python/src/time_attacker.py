@@ -42,11 +42,14 @@ class TimeAttacker:
       self.display.reset()
 
   def start(self, gpio):
+    print("start")
+    self.display.reset()
     if GPIO.input(self.processed_lamp) == 0:
-      print("start")
-      self.display.reset()
-      self.start = time.perf_counter()
-      self.turn_on_led()
+      self.write("start")
+    else:
+      self.write("restart")
+    self.start = time.perf_counter()
+    self.turn_on_led()
 
   def finish(self, gpio):
     if GPIO.input(self.processed_lamp) == 1:
@@ -55,21 +58,21 @@ class TimeAttacker:
       self.end = time.perf_counter()
       attack_time = self.calculate(self.start, self.end)
       print(attack_time)
-      self.write(attack_time)
+      formatted_attack_time = format(attack_time, '.1f') + '  Sec'
+      self.write(formatted_attack_time)
       self.turn_off_led()
       self.reset()
 
-  def write(self, attack_time):
-    formatted_attack_time = format(attack_time, '.1f') + '  Sec'
+  def write(self, text):
     #font = ImageFont.load_default()
     font = ImageFont.truetype(font='/usr/share/fonts/truetype/piboto/PibotoLt-Regular.ttf', size=30)
     # https://pillow.readthedocs.io/en/stable/reference/Image.html#constructing-images
     image = Image.new('1', (self.display.width, self.display.hight), 0)
     draw = ImageDraw.Draw(image)
-    font_width, font_height = font.getsize(formatted_attack_time)
+    font_width, font_height = font.getsize(text)
     draw.text(
         (self.display.width // 2 - font_width // 2, self.display.hight // 2 - font_height // 2),
-        formatted_attack_time,
+        text,
         font=font,
         fill=255,
     )
