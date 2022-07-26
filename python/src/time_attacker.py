@@ -25,7 +25,8 @@ class TimeAttacker:
     GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=300)
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
-    self.display = SSD1306(0x3c, 128, 32)
+    # self.display = SSD1306(0x3c, 128, 32)
+    self.display = SSD1306(0x3c, 128, 64)
 
     try:
       while True:
@@ -60,9 +61,9 @@ class TimeAttacker:
 
   def write(self, attack_time):
     formatted_attack_time = format(attack_time, '.1f') + '  Sec'
-    font = ImageFont.load_default()
+    #font = ImageFont.load_default()
+    font = ImageFont.truetype(font='/usr/share/fonts/truetype/piboto/PibotoLt-Regular.ttf', size=30)
     # https://pillow.readthedocs.io/en/stable/reference/Image.html#constructing-images
-    # イメージを作成
     image = Image.new('1', (self.display.width, self.display.hight), 0)
     draw = ImageDraw.Draw(image)
     font_width, font_height = font.getsize(formatted_attack_time)
