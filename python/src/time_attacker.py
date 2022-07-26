@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 import time
 import math
 
-from device.aqm0802a import AQM0802A
+from PIL import Image, ImageDraw, ImageFont
 from device.ssd1306 import SSD1306
 
 class TimeAttacker:
@@ -25,7 +25,8 @@ class TimeAttacker:
     GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=300)
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
-    self.display = SSD1306(0x3c, 128, 32)
+    # self.display = SSD1306(0x3c, 128, 32)
+    self.display = SSD1306(0x3c, 128, 64)
 
     try:
       while True:
@@ -45,7 +46,7 @@ class TimeAttacker:
       print("start")
       self.display.reset()
       self.start = time.perf_counter()
-      self.turn_on_off_led(GPIO.HIGH)
+      self.turn_on_led()
 
   def finish(self, gpio):
     if GPIO.input(self.processed_lamp) == 1:
@@ -55,19 +56,34 @@ class TimeAttacker:
       attack_time = self.calculate(self.start, self.end)
       print(attack_time)
       self.write(attack_time)
-      self.turn_on_off_led(GPIO.LOW)
+      self.turn_off_led()
       self.reset()
 
   def write(self, attack_time):
-    self.display.reset()
-    self.display.write(format(attack_time, '.1f') + '  Sec')
+    formatted_attack_time = format(attack_time, '.1f') + '  Sec'
+    #font = ImageFont.load_default()
+    font = ImageFont.truetype(font='/usr/share/fonts/truetype/piboto/PibotoLt-Regular.ttf', size=30)
+    # https://pillow.readthedocs.io/en/stable/reference/Image.html#constructing-images
+    image = Image.new('1', (self.display.width, self.display.hight), 0)
+    draw = ImageDraw.Draw(image)
+    font_width, font_height = font.getsize(formatted_attack_time)
+    draw.text(
+        (self.display.width // 2 - font_width // 2, self.display.hight // 2 - font_height // 2),
+        formatted_attack_time,
+        font=font,
+        fill=255,
+    )
+    self.display.write(image)
 
   def reset(self):
     self.start = 0
     self.end = 0
 
-  def turn_on_off_led(self, up_down):
-    GPIO.output(self.processed_lamp, up_down)
+  def turn_on_led(self):
+    GPIO.output(self.processed_lamp, GPIO.HIGH)
+
+  def turn_off_led(self):
+    GPIO.output(self.processed_lamp, GPIO.LOW)
 
   def calculate(self, start_time, end_time):
     return end_time - start_time
