@@ -21,8 +21,8 @@ class TimeAttacker:
     GPIO.setup(self.finish_btn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
   def execute(self):
-    GPIO.add_event_detect(self.start_btn, GPIO.FALLING, callback=self.start, bouncetime=300)
-    GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=300)
+    GPIO.add_event_detect(self.start_btn, GPIO.FALLING, callback=self.start, bouncetime=350)
+    GPIO.add_event_detect(self.finish_btn, GPIO.FALLING, callback=self.finish, bouncetime=350)
     GPIO.output(self.processed_lamp, GPIO.LOW)
 
     # self.display = SSD1306(0x3c, 128, 32)
