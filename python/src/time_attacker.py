@@ -27,6 +27,7 @@ class TimeAttacker:
 
     # self.display = SSD1306(0x3c, 128, 32)
     self.display = SSD1306(0x3c, 128, 64)
+    self.write("Ready")
 
     try:
       while True:
