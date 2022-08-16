@@ -45,10 +45,7 @@ class TimeAttacker:
   def start(self, gpio):
     print("start")
     self.display.reset()
-    if GPIO.input(self.processed_lamp) == 0:
-      self.write("start")
-    else:
-      self.write("restart")
+    self.write("start")
     self.start = time.perf_counter()
     self.turn_on_led()
 
